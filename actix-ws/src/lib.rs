@@ -77,7 +77,7 @@ pub fn handle(
 
     Ok((
         response
-            .message_body(BodyStream::new(StreamingBody::new_with_codec(rx, Codec::new().max_size(1_048_576))).boxed())?
+            .message_body(BodyStream::new(StreamingBody::new_with_codec(rx, Codec::new().max_size(16_777_216))).boxed())?
             .into(),
         Session::new(tx),
         MessageStream::new(body.into_inner()),
