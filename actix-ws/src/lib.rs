@@ -10,7 +10,7 @@
 pub use actix_http::ws::{CloseCode, CloseReason, Item, Message, ProtocolError};
 use actix_http::{
     body::{BodyStream, MessageBody},
-    ws::handshake,
+    ws::{handshake, Codec},
 };
 use actix_web::{web, HttpRequest, HttpResponse};
 use tokio::sync::mpsc::channel;
@@ -77,7 +77,7 @@ pub fn handle(
 
     Ok((
         response
-            .message_body(BodyStream::new(StreamingBody::new(rx)).boxed())?
+            .message_body(BodyStream::new(StreamingBody::new_with_codec(rx, Codec::new().max_size(1_048_576))).boxed())?
             .into(),
         Session::new(tx),
         MessageStream::new(body.into_inner()),

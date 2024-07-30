@@ -32,11 +32,15 @@ pub struct StreamingBody {
 
 impl StreamingBody {
     pub(super) fn new(session_rx: Receiver<Message>) -> Self {
+        StreamingBody::new_with_codec(session_rx, Codec::new())
+    }
+
+    pub(super) fn new_with_codec(session_rx: Receiver<Message>, codec: Codec) -> Self {
         StreamingBody {
             session_rx,
             messages: VecDeque::new(),
             buf: BytesMut::new(),
-            codec: Codec::new(),
+            codec,
             closing: false,
         }
     }
